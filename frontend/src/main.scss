@@ -3,5 +3,10 @@
 
 //Components styles
 @import "./components/Header/Header.scss";
+@import "./components/Banner/Banner.scss";
+@import "./components/FeatureItem/FeatureItem.scss";
+@import "./components/Footer/Footer.scss";
 
 //Pages styles
+@import "./pages/User/User.scss";
+@import "./pages/Signin/Signin.scss";
