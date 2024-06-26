@@ -1,3 +1,5 @@
+import ActionLink from "../ActionLink/ActionLink";
+
 export default function Header() {
   return (
     <nav className="main-nav">
@@ -10,10 +12,12 @@ export default function Header() {
         <h1 className="sr-only">Argent Bank</h1>
       </a>
       <div>
-        <a className="main-nav-item" href="/sign-in">
-          <i className="fa fa-user-circle"></i>
+        <ActionLink href="/sign-in" iconClassname="fa fa-user-circle">
           Sign In
-        </a>
+        </ActionLink>
+        <ActionLink href="/home" iconClassname="fa fa-sign-out">
+          Sign Out
+        </ActionLink>
       </div>
     </nav>
   );
