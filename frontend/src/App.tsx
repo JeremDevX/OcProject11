@@ -7,6 +7,7 @@ import User from "./pages/User/User";
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import { restoreState } from "./features/auth/authSlice";
+import ProtectedRoute from "./ProtectedRoute";
 
 export default function App() {
   const dispatch = useDispatch();
@@ -23,8 +24,25 @@ export default function App() {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/sign-in" element={<Signin />} />
-        <Route path="/user" element={<User />} />
+        <Route
+          path="/sign-in"
+          element={
+            <ProtectedRoute redirectIfAuthenticated={true} redirectTo="/user">
+              <Signin />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/user"
+          element={
+            <ProtectedRoute
+              redirectIfAuthenticated={false}
+              redirectTo="/sign-in"
+            >
+              <User />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
       <Footer />
     </Router>
