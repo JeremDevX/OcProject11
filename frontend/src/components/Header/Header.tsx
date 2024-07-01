@@ -2,27 +2,17 @@ import { useDispatch, useSelector } from "react-redux";
 import ActionLink from "../ActionLink/ActionLink";
 import { logout } from "../../features/auth/authSlice";
 import { RootState } from "../../store/store";
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const userData = useSelector((state: RootState) => state.auth.user);
 
   const handleLogout = () => {
     dispatch(logout());
     navigate("/");
   };
-
-  const userData = useSelector((state: RootState) => state.auth.user);
-
-  useEffect(() => {
-    if (userData) {
-      console.log(userData, "userData");
-      return;
-    }
-    console.log("no user data");
-  }, [userData]);
 
   return (
     <nav className="main-nav">

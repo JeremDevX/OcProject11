@@ -27,7 +27,7 @@ export default function App() {
         <Route
           path="/sign-in"
           element={
-            <ProtectedRoute redirectIfAuthenticated={true} redirectTo="/user">
+            <ProtectedRoute redirectIfAuthenticated redirectTo="/user">
               <Signin />
             </ProtectedRoute>
           }

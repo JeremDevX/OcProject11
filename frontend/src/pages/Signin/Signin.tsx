@@ -1,27 +1,24 @@
 import { useNavigate } from "react-router-dom";
 import Form from "../../components/Form/Form";
-import { useDispatch, useSelector } from "react-redux";
-import { login, selectIsAuthenticated } from "../../features/auth/authSlice";
-import { useEffect } from "react";
-import { RootState } from "../../store/store";
+import { useDispatch } from "react-redux";
+import { login } from "../../features/auth/authSlice";
 
 export default function Signin() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const isAuthenticated = useSelector(selectIsAuthenticated);
-  const userlog = useSelector((state: RootState) => state.auth.user);
 
   const fields = [
     {
       id: "email",
       label: "Email",
       type: "email",
+      className: "input-wrapper-sign-in",
     },
     {
       id: "password",
       label: "Password",
       type: "password",
+      className: "input-wrapper-sign-in",
     },
   ];
   const button = [
@@ -33,18 +30,11 @@ export default function Signin() {
     },
   ];
 
-  useEffect(() => {
-    console.log(isAuthenticated);
-    console.log(userlog);
-  }, [isAuthenticated]);
-
   const handleFormSubmit = async (formData: {
     [key: string]: string | boolean;
   }) => {
     const email = formData.email as string;
     const password = formData.password as string;
-    const rememberMe = formData.rememberMe as boolean;
-    console.log(email, password, rememberMe);
     if (!email || !password) {
       let message = "Please fill";
       if (!email && !password) {
@@ -66,15 +56,11 @@ export default function Signin() {
         body: JSON.stringify({ email, password }),
       });
       if (!reponse.ok) {
-        throw new Error("Network error ");
+        throw new Error("Network error or invalid credentials");
       }
       const data = await reponse.json();
-      console.log(data);
 
       if (data.body.token) {
-        console.log("control token", data.body.token);
-
-        //
         const userResponse = await fetch(
           "http://localhost:3001/api/v1/user/profile",
           {
@@ -86,7 +72,6 @@ export default function Signin() {
           }
         );
         const userData = await userResponse.json();
-        console.log(userData);
         if (userData.body) {
           const user = {
             email: userData.body.email,
@@ -94,12 +79,12 @@ export default function Signin() {
             lastName: userData.body.lastName,
             userName: userData.body.userName,
           };
-          dispatch(login({ token: data.body.token, user }));
+          const token = data.body.token;
+          dispatch(login({ token, user }));
           navigate("/user");
         } else {
           throw new Error("Failed to fetch user data");
         }
-        //
       } else {
         throw new Error("Invalid credentials");
       }
@@ -119,7 +104,6 @@ export default function Signin() {
           showRememberMe
           buttons={button}
         />
-        {userlog ? <p> Welcome {userlog.userName}</p> : null}
       </section>
     </main>
   );

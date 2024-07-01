@@ -16,25 +16,29 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: sticky;
+  top: 0;
+  background-color: #fff;
   padding: 5px 20px;
-}
-
-.main-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-.main-nav a.router-link-exact-active {
-  color: #42b983;
+  a {
+    font-weight: bold;
+    color: #2c3e50;
+    font-size: 1.1rem;
+  }
+  a.router-link-exact-active {
+    color: #42b983;
+  }
+  i {
+    margin-right: 4px;
+  }
 }
 
 .main-nav-item {
   text-decoration: none;
   margin-right: 0.5rem;
-}
-
-.main-nav-item:hover {
-  text-decoration: underline;
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .main-nav-logo {

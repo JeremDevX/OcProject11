@@ -5,14 +5,15 @@ interface Field {
   id: string;
   label: string;
   type: string;
+  className: string;
   defaultValue?: string;
   disabled?: boolean;
 }
 interface Buttons {
   text: string;
-  onClick: () => void | ((formData: { [key: string]: string }) => void);
+  onClick: () => void;
   className: string;
-  isSubmit?: boolean;
+  isSubmit: boolean;
 }
 
 interface FormProps {
@@ -80,7 +81,7 @@ export default function Form(props: FormProps) {
   return (
     <form onSubmit={handleSubmit}>
       {fields.map((field) => (
-        <div className="input-wrapper" key={field.id}>
+        <div className={field.className} key={field.id}>
           <label htmlFor={field.id}>{field.label}</label>
           <input
             type={field.type}
@@ -106,12 +107,12 @@ export default function Form(props: FormProps) {
       <div className="button-wrapper">
         {buttons.map((button, index) =>
           button.isSubmit ? (
-            <Button key={index} className={button.className}>
+            <Button key={"Submit button" + index} className={button.className}>
               {button.text}
             </Button>
           ) : (
             <Button
-              key={index}
+              key={"Button" + index}
               className={button.className}
               onClick={button.onClick}
             >
