@@ -39,10 +39,16 @@ const authSlice = createSlice({
     restoreState: (_state, action: PayloadAction<AuthState>) => {
       return action.payload;
     },
+    updateUser: (state, action: PayloadAction<Partial<User>>) => {
+      if (state.user) {
+        state.user = { ...state.user, ...action.payload };
+        localStorage.setItem("authState", JSON.stringify(state));
+      }
+    },
   },
 });
 
-export const { login, logout, restoreState } = authSlice.actions;
+export const { login, logout, restoreState, updateUser } = authSlice.actions;
 
 export const selectIsAuthenticated = (state: RootState) =>
   state.auth.isAuthenticated;

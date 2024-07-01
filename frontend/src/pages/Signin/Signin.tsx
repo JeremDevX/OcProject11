@@ -3,7 +3,6 @@ import Form from "../../components/Form/Form";
 import { useDispatch, useSelector } from "react-redux";
 import { login, selectIsAuthenticated } from "../../features/auth/authSlice";
 import { useEffect } from "react";
-
 import { RootState } from "../../store/store";
 
 export default function Signin() {
@@ -13,16 +12,38 @@ export default function Signin() {
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const userlog = useSelector((state: RootState) => state.auth.user);
 
+  const fields = [
+    {
+      id: "email",
+      label: "Email",
+      type: "email",
+    },
+    {
+      id: "password",
+      label: "Password",
+      type: "password",
+    },
+  ];
+  const button = [
+    {
+      text: "Sign In",
+      onClick: () => {},
+      className: "sign-in-button",
+      isSubmit: true,
+    },
+  ];
+
   useEffect(() => {
     console.log(isAuthenticated);
     console.log(userlog);
   }, [isAuthenticated]);
 
-  const handleFormSubmit = async (
-    email: string,
-    password: string,
-    rememberMe: boolean
-  ) => {
+  const handleFormSubmit = async (formData: {
+    [key: string]: string | boolean;
+  }) => {
+    const email = formData.email as string;
+    const password = formData.password as string;
+    const rememberMe = formData.rememberMe as boolean;
     console.log(email, password, rememberMe);
     if (!email || !password) {
       let message = "Please fill";
@@ -92,7 +113,12 @@ export default function Signin() {
       <section className="sign-in-content">
         <i className="fa fa-user-circle sign-in-icon"></i>
         <h1>Sign In</h1>
-        <Form onSubmit={handleFormSubmit} />
+        <Form
+          fields={fields}
+          onSubmit={handleFormSubmit}
+          showRememberMe
+          buttons={button}
+        />
         {userlog ? <p> Welcome {userlog.userName}</p> : null}
       </section>
     </main>

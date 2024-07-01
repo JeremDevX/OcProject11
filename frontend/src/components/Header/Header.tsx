@@ -34,12 +34,18 @@ export default function Header() {
         />
         <h1 className="sr-only">Argent Bank</h1>
       </a>
-      <div>
-        {!userData ? (
+
+      {!userData ? (
+        <div>
           <ActionLink href="/sign-in" iconClassname="fa fa-user-circle">
             Sign In
           </ActionLink>
-        ) : (
+        </div>
+      ) : (
+        <div>
+          <ActionLink href="/user" iconClassname="fa fa-user-circle">
+            {userData.userName}
+          </ActionLink>
           <ActionLink
             href="#"
             iconClassname="fa fa-sign-out"
@@ -47,8 +53,8 @@ export default function Header() {
           >
             Sign Out
           </ActionLink>
-        )}
-      </div>
+        </div>
+      )}
     </nav>
   );
 }
