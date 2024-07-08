@@ -1,0 +1,198 @@
+swagger: '2.0'
+info:
+  title: Bank Argent API documentation
+  description: Contains future APIs for accounts transactions.
+  version: '0.1'
+  termsOfService: http://swagger.io/terms
+host: localhost:3001
+basePath: /api/v0.1
+schemes:
+  - https
+paths:
+  /accounts:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Accounts
+      summary: Account
+      description: Get user accounts
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Accounts fetched Successfully
+          schema:
+            $ref: "#/definitions/Account"
+        '400':
+          description: Invalid Fields
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/ApiResponse"
+  /accounts/{accountId}/transactions:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Accounts
+      summary: Get transactions of a specific account
+      description: Retrieve all transactions for a specific account by its ID
+      produces:
+        - application/json
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          type: string
+          description: Id of the account to fetch transcations for
+      responses:
+        '200':
+          description: Transactions fetched Successfully
+          schema:
+            $ref: "#/definitions/Transactions"
+        '404':
+          description: Account not found
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/ApiResponse"
+  /accounts/{accountId}/{transactionId}/description:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Accounts
+      summary: Get description of a transaction
+      produces:
+        - application/json
+      parameters:
+      - name: accountId
+        in: path
+        required: true
+        type: string
+        description: Id of the account to fetch transcations for
+      - name: transactionId
+        in: path
+        required: true
+        type: string
+        description: Id of the transaction to fetch description for
+      responses:
+        '200':
+          description: Transaction details fetched Successfully
+          schema:
+            $ref: "#/definitions/TransactionDetails"
+        '404':
+          description: Transaction not found
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/ApiResponse"
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - Accounts
+      summary: Update description of a transaction
+      produces:
+        - application/json
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          type: string
+          description: Id of the account to fetch transactions for
+        - name: transactionId
+          in: path
+          required: true
+          type: string
+          description: Id of the transaction to fetch description for
+        - in: body
+          name: body
+          description: Update transaction description
+          required: true
+          schema:
+            $ref: "#/definitions/TransactionDescription"
+      responses:
+        '200':
+          description: Transaction updated fetched Successfully
+          schema:
+            $ref: "#/definitions/TransactionDetails"
+        '404':
+          description: Transaction not found
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: "#/definitions/ApiResponse"
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+definitions:
+  Account:
+    properties:
+      accountId:
+        type: number
+      title:
+        type: string
+        description: Account name 
+      amount:
+        type: number
+        description: Account amount
+      currency:
+        type: string
+        description: Account currency
+      balanceType:
+        type: string
+        description: Account balance type
+  Transactions:
+    properties:
+      transactionId:
+        type: number
+        description: Id of transaction
+      date:
+        type: string
+        format: date
+        description: Date of transaction 
+      description:
+        type: string
+        description: Description of the transaction
+      currency:
+        type: string
+        description: Transaction currency
+      balance:
+        type: number
+        description: Account balance after the transaction
+  TransactionDetails:
+    properties:
+      type:
+        type: string
+        description: Type of the transaction
+      category:
+        type: string
+        description: Category for the transaction
+      note:
+        type: string
+        description: Additionnal note for the transaction
+  TransactionDescription:
+    properties:
+      category:
+        type: string
+      note:
+        type: string
+  ApiResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
