@@ -10,6 +10,9 @@
 - Redux ( State management )
 - StrapiJS ( API )
 - Swagger ( documentation )
+- Swagger Editor ( documentation wireframe )
+
+Swagger du wireframe des transactions -> [Swagger](backend/accountDetailsSwagger.yaml)
 
 Repo de l'API Strapi -> https://github.com/Jerem-Dev/project11strapi
 
