@@ -3,8 +3,17 @@ import Button from "../../components/Button/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import Form from "../../components/Form/Form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { updateUser } from "../../features/auth/authSlice";
+
+interface strapiAccountData {
+  id: number;
+  attributes: {
+    title: string;
+    amount: number;
+    balance: string;
+  };
+}
 
 const accountData = [
   {
@@ -28,6 +37,8 @@ const accountData = [
 ];
 
 export default function User() {
+  const [strapiAccountData, setStrapiAccountData] =
+    useState<strapiAccountData[]>();
   const { user, token } = useSelector((state: RootState) => state.auth);
   const [toggleEdit, setToggleEdit] = useState<boolean>(false);
   const dispatch = useDispatch();
@@ -108,6 +119,26 @@ export default function User() {
     }
   };
 
+  useEffect(() => {
+    if (user) {
+      const fecthAccountData = async () => {
+        try {
+          const response = await fetch("http://localhost:1337/api/accounts", {
+            method: "GET",
+          });
+          if (!response.ok) {
+            throw new Error("Failed to fetch account data");
+          }
+          const data = await response.json();
+          setStrapiAccountData(data.data);
+        } catch (error) {
+          console.error("An error occurred:", error);
+        }
+      };
+      fecthAccountData();
+    }
+  }, [user]);
+
   return (
     <main className="main bg-dark">
       <div className="header">
@@ -135,15 +166,25 @@ export default function User() {
         )}
       </div>
       <h2 className="sr-only">Accounts</h2>
-      {accountData.map((account, index) => (
-        <Account
-          key={"Account n°" + (index + 1)}
-          classname={account.classname}
-          accountTitle={account.accountTitle}
-          accountAmount={account.accountAmount}
-          accountAmountDescription={account.accountAmountDescription}
-        />
-      ))}
+      {strapiAccountData
+        ? strapiAccountData.map((account, index) => (
+            <Account
+              key={"Account n°" + index}
+              classname="account"
+              accountTitle={account.attributes.title}
+              accountAmount={"$" + account.attributes.amount}
+              accountAmountDescription={account.attributes.balance}
+            />
+          ))
+        : accountData.map((account, index) => (
+            <Account
+              key={"Account n°" + (index + 1)}
+              classname={account.classname}
+              accountTitle={account.accountTitle}
+              accountAmount={account.accountAmount}
+              accountAmountDescription={account.accountAmountDescription}
+            />
+          ))}
     </main>
   );
 }
